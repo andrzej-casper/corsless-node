@@ -50,6 +50,7 @@ else
   echo "You can get it with:"
   echo " $ sudo pacman -S docker"
   echo " $ sudo systemctl enable --now docker.service"
+  echo " $ sudo usermod -aG docker \$USER && newgrp docker"
   exit 1
 fi
 
