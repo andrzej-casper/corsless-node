@@ -1,0 +1,14 @@
+= CORS-less Node
+
+Run reverse proxy to avoid CORS error while calling Casper nodes from browser.
+
+== Requirements
+
+- docker
+
+== Usage
+
+[source,bash]
+====
+$ ./run.sh 135.181.216.142 7777
+====
