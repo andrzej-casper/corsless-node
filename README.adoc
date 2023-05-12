@@ -6,9 +6,9 @@ Run reverse proxy to avoid CORS error while calling Casper nodes from browser.
 
 == Requirements
 
-- docker
-- curl
-- jq
+* docker
+* curl
+* jq
 
 == Usage
 
