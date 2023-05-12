@@ -2,6 +2,8 @@
 
 Run reverse proxy to avoid CORS error while calling Casper nodes from browser.
 
+*Note:* This is limitation that should be fixed in node 1.5.0.
+
 == Requirements
 
 - docker
