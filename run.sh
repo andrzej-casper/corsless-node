@@ -60,7 +60,7 @@ NODE_STATUS=`curl \
   --compressed \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"info_get_status","id":1}' \
-  135.181.216.142:7777/rpc`
+  ${UPSTREAM_NODE_IP}:${UPSTREAM_NODE_PORT}/rpc`
 echo ${NODE_STATUS} | jq .result.uptime
 echo ${NODE_STATUS} | jq .result.chainspec_name
 
