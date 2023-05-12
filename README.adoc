@@ -12,3 +12,10 @@ Run reverse proxy to avoid CORS error while calling Casper nodes from browser.
 ====
 $ ./run.sh 135.181.216.142 7777
 ====
+
+== TODO
+
+Consider getting peers from:
+ - https://event-store-api-clarity-mainnet.make.services/rpc/info_get_status (mainet)
+ - https://event-store-api-clarity-testnet.make.services/rpc/info_get_status (testnet)
+ - https://casper.onrender.com/api/deployer/peers (testnet)
