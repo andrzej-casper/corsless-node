@@ -15,24 +15,24 @@ Run reverse proxy to avoid CORS error while calling Casper nodes from browser.
 If you want to proxy specific node:
 
 [source,bash]
-====
+----
 $ ./run.sh 135.181.216.142 7777
-====
+----
 
 Alternatively, you can get node picked randomly among `mainnet` and `testnet`:
 
 [source,bash]
-====
+----
 $ ./run.sh testnet
-====
+----
 
 After successful launch, proxy container will be running in background (with auto restart), but it might be stopped and removed:
 
 [source,bash]
-====
+----
 $ docker stop corsless-casper-node
 $ docker rm corsless-casper-node
-====
+----
 
 == Notes
 
