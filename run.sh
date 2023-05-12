@@ -93,10 +93,10 @@ docker run \
   --detach \
   --name ${CONTAINER_NAME} \
   --restart=unless-stopped \
-  -v ${SCRIPT_PATH}/mitmproxy:/home/mitmproxy/.mitmproxy \
+  -v ${SCRIPT_PATH}/mitmproxy:/mitmproxy \
   -p ${BIND_PORT}:${BIND_PORT} \
   ${MITMPROXY_IMAGE} \
-  mitmdump -s /home/mitmproxy/.mitmproxy/cors.py --mode reverse:http://${UPSTREAM_NODE_IP}:${UPSTREAM_NODE_PORT} --listen-host ${BIND_HOST} -p ${BIND_PORT}
+  mitmdump -s /mitmproxy/cors.py --mode reverse:http://${UPSTREAM_NODE_IP}:${UPSTREAM_NODE_PORT} --listen-host ${BIND_HOST} -p ${BIND_PORT}
 
 echo "Done! Reverse proxy is running in background, listening at ${BIND_HOST}:${BIND_PORT}."
 echo "You might close this console ;)"
