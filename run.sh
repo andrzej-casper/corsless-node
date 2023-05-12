@@ -54,14 +54,15 @@ else
   exit 1
 fi
 
-echo "> Making sure upstream node is online - check uptime"
-curl \
+echo "> Making sure upstream node is online - uptime, chain"
+NODE_STATUS=`curl \
   --silent \
   --compressed \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"info_get_status","id":1}' \
-  135.181.216.142:7777/rpc \
-  | jq .result.uptime
+  135.181.216.142:7777/rpc`
+echo ${NODE_STATUS} | jq .result.uptime
+echo ${NODE_STATUS} | jq .result.chainspec_name
 
 echo "> Making sure no old container is running"
 if [ "$(docker ps -qa -f name=${CONTAINER_NAME})" ]; then
