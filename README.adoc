@@ -24,6 +24,14 @@ Alternatively, you can get node picked randomly among `mainnet` and `testnet`:
 $ ./run.sh testnet
 ====
 
+After successful launch, proxy container will be running in background (with auto restart), but it might be stopped and removed:
+
+[source,bash]
+====
+$ docker stop corsless-casper-node
+$ docker rm corsless-casper-node
+====
+
 == Notes
 
 You can get list of connected peers from any node. You can also visit https://casper.onrender.com/[this helper tool].
