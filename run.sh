@@ -27,6 +27,22 @@ MITMPROXY_IMAGE="mitmproxy/mitmproxy:9.0.1"
 CONTAINER_NAME="corsless-casper-node"
 
 echo "> Checking requirements"
+if which curl >/dev/null 2>&1; then
+  :
+else
+  echo "Error: curl not installed."
+  echo "You can get it with:"
+  echo " $ sudo pacman -S curl"
+  exit 1
+fi
+if which jq >/dev/null 2>&1; then
+  :
+else
+  echo "Error: jq not installed."
+  echo "You can get it with:"
+  echo " $ sudo pacman -S jq"
+  exit 1
+fi
 if which docker >/dev/null 2>&1; then
   :
 else
@@ -36,6 +52,15 @@ else
   echo " $ sudo systemctl enable --now docker.service"
   exit 1
 fi
+
+echo "> Making sure upstream node is online - check uptime"
+curl \
+  --silent \
+  --compressed \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"info_get_status","id":1}' \
+  135.181.216.142:7777/rpc \
+  | jq .result.uptime
 
 echo "> Making sure no old container is running"
 if [ "$(docker ps -qa -f name=${CONTAINER_NAME})" ]; then
