@@ -12,29 +12,6 @@ cd `dirname ${SCRIPT_PATH}` > /dev/null
 SCRIPT_PATH=`pwd`;
 popd  > /dev/null
 
-if [ "$#" -lt 1 ]; then
-  echo "Illegal number of parameters."
-  echo "Usage:"
-  echo "  $0 <upstream_node_ip> [<upstream_node_port>]"
-  echo "You can also get node IP automatically"
-  echo "  $0 mainnet|testnet"
-  exit 1
-fi
-case $1 in
-  mainnet|testnet)
-    echo "> Looking for ${1} node"
-    PEERS=`curl \
-      --silent \
-      "https://event-store-api-clarity-${1}.make.services/rpc/info_get_status"`
-    UPSTREAM_NODE_IP=`echo ${PEERS} | jq -r ".result.peers[].address" | sort -R | head -n 1 | cut -d ":" -f 1`
-    UPSTREAM_NODE_PORT="7777"
-    echo "Randomly picked ${UPSTREAM_NODE_IP} (port 777 assumed)"
-    ;;
-  *)
-    UPSTREAM_NODE_IP="${1}"
-    UPSTREAM_NODE_PORT="${2:-7777}"
-esac
-
 BIND_HOST="0.0.0.0"
 BIND_PORT="7777"
 
@@ -68,6 +45,30 @@ else
   echo " $ sudo usermod -aG docker \$USER && newgrp docker"
   exit 1
 fi
+
+# Parse parameters.
+if [ "$#" -lt 1 ]; then
+  echo "Illegal number of parameters."
+  echo "Usage:"
+  echo "  $0 <upstream_node_ip> [<upstream_node_port>]"
+  echo "You can also get node IP automatically"
+  echo "  $0 mainnet|testnet"
+  exit 1
+fi
+case $1 in
+  mainnet|testnet)
+    echo "> Looking for ${1} node"
+    PEERS=`curl \
+      --silent \
+      "https://event-store-api-clarity-${1}.make.services/rpc/info_get_status"`
+    UPSTREAM_NODE_IP=`echo ${PEERS} | jq -r ".result.peers[].address" | sort -R | head -n 1 | cut -d ":" -f 1`
+    UPSTREAM_NODE_PORT="7777"
+    echo "Randomly picked ${UPSTREAM_NODE_IP} (port 7777 assumed)"
+    ;;
+  *)
+    UPSTREAM_NODE_IP="${1}"
+    UPSTREAM_NODE_PORT="${2:-7777}"
+esac
 
 echo "> Making sure upstream node is online - uptime, chain"
 NODE_STATUS=`curl \
