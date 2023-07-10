@@ -88,6 +88,23 @@ if [ "$(docker ps -qa -f name=${CONTAINER_NAME})" ]; then
   docker rm ${CONTAINER_NAME};
 fi
 
+echo "> Looking for optional certificates at ./mitmproxy/cert.pem"
+CERTS_ENABLED=""
+if [ -s "${SCRIPT_PATH}/mitmproxy/cert.pem" ]; then
+  if [ -z "$(cat ${SCRIPT_PATH}/mitmproxy/cert.pem | grep 'BEGIN PRIVATE KEY')" ]; then
+    echo "[ERROR] Certificate must contain private key."
+    exit 1
+  fi
+  if [ -z "$(cat ${SCRIPT_PATH}/mitmproxy/cert.pem | grep 'BEGIN CERTIFICATE')" ]; then
+    echo "[ERROR] Certificate must contain public key."
+    exit 1
+  fi
+  CERTS_ENABLED="yup"
+  echo "HTTPS support enabled."
+else
+  echo "No certificates found."
+fi
+
 echo "> Launching new MITM proxy container"
 docker run \
   --detach \
@@ -96,7 +113,8 @@ docker run \
   -v ${SCRIPT_PATH}/mitmproxy:/mitmproxy \
   -p ${BIND_PORT}:${BIND_PORT} \
   ${MITMPROXY_IMAGE} \
-  mitmdump -s /mitmproxy/cors.py --mode reverse:http://${UPSTREAM_NODE_IP}:${UPSTREAM_NODE_PORT} --listen-host ${BIND_HOST} -p ${BIND_PORT} --set block_global=false --no-http2
+  mitmdump -s /mitmproxy/cors.py --mode reverse:http://${UPSTREAM_NODE_IP}:${UPSTREAM_NODE_PORT} --listen-host ${BIND_HOST} -p ${BIND_PORT} --set block_global=false --no-http2 \
+  ${CERTS_ENABLED:+--certs} ${CERTS_ENABLED:+*=/mitmproxy/cert.pem}
 
 echo "Done! Reverse proxy is running in background, listening at ${BIND_HOST}:${BIND_PORT}."
 echo "You might close this console ;)"

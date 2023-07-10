@@ -35,6 +35,37 @@ $ docker stop corsless-casper-node
 $ docker rm corsless-casper-node
 ----
 
+=== HTTPS support
+
+There is option to enable HTTPS in this proxy, by simply placing PEM file under `./mitmproxy/cert.pem`. It should be in the following format: 
+
+[source]
+----
+-----BEGIN PRIVATE KEY-----
+<private key>
+-----END PRIVATE KEY-----
+-----BEGIN CERTIFICATE-----
+<cert>
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+<intermediary cert (optional)>
+-----END CERTIFICATE-----
+----
+
+It will be picked automatically during proxy startup.
+
+[TIP]
+====
+You can use **Let's Encrypt** to get free certificates for your domain!
+
+After getting them, simply combine files to obtain valid `cert.pem`:
+
+[source, bash]
+----
+cat /etc/letsencrypt/live/casper-node.xyz/privkey.pem /etc/letsencrypt/live/casper-node.xyz/fullchain.pem > ./mitmproxy/cert.pem
+----
+====
+
 == Notes
 
 You can get list of connected peers from any node. You can also visit https://casper.onrender.com/[this helper tool].
