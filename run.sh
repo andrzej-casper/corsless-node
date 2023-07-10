@@ -82,10 +82,10 @@ echo ${NODE_STATUS} | jq .result.chainspec_name
 
 echo "> Making sure no old container is running"
 if [ "$(docker ps -qa -f name=${CONTAINER_NAME})" ]; then
-    if [ "$(docker ps -q -f name=${CONTAINER_NAME})" ]; then
-        docker stop ${CONTAINER_NAME};
-    fi
-    docker rm ${CONTAINER_NAME};
+  if [ "$(docker ps -q -f name=${CONTAINER_NAME})" ]; then
+    docker stop ${CONTAINER_NAME};
+  fi
+  docker rm ${CONTAINER_NAME};
 fi
 
 echo "> Launching new MITM proxy container"
